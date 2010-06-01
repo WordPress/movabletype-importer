@@ -41,7 +41,7 @@ class MT_Import extends WP_Importer {
 	function header() {
 		echo '<div class="wrap">';
 		screen_icon();
-		echo '<h2>'.__('Import Movable Type or TypePad').'</h2>';
+		echo '<h2>'.__('Import Movable Type or TypePad', 'movabletype-importer').'</h2>';
 	}
 
 	function footer() {
@@ -52,7 +52,7 @@ class MT_Import extends WP_Importer {
 		$this->header();
 ?>
 <div class="narrow">
-<p><?php _e( 'Howdy! We are about to begin importing all of your Movable Type or TypePad entries into WordPress. To begin, either choose a file to upload and click &#8220;Upload file and import&#8221;, or use FTP to upload your MT export file as <code>mt-export.txt</code> in your <code>/wp-content/</code> directory and then click &#8220;Import mt-export.txt&#8221;.' ); ?></p>
+<p><?php _e( 'Howdy! We are about to begin importing all of your Movable Type or TypePad entries into WordPress. To begin, either choose a file to upload and click &#8220;Upload file and import&#8221;, or use FTP to upload your MT export file as <code>mt-export.txt</code> in your <code>/wp-content/</code> directory and then click &#8220;Import mt-export.txt&#8221;.' , 'movabletype-importer'); ?></p>
 
 <?php wp_import_upload_form( add_query_arg('step', 1) ); ?>
 <form method="post" action="<?php echo esc_attr(add_query_arg('step', 1)); ?>" class="import-upload-form">
@@ -60,12 +60,12 @@ class MT_Import extends WP_Importer {
 <?php wp_nonce_field('import-upload'); ?>
 <p>
 	<input type="hidden" name="upload_type" value="ftp" />
-<?php _e('Or use <code>mt-export.txt</code> in your <code>/wp-content/</code> directory'); ?></p>
+<?php _e('Or use <code>mt-export.txt</code> in your <code>/wp-content/</code> directory', 'movabletype-importer'); ?></p>
 <p class="submit">
-<input type="submit" class="button" value="<?php esc_attr_e('Import mt-export.txt'); ?>" />
+<input type="submit" class="button" value="<?php esc_attr_e('Import mt-export.txt', 'movabletype-importer'); ?>" />
 </p>
 </form>
-<p><?php _e('The importer is smart enough not to import duplicates, so you can run this multiple times without worry if&#8212;for whatever reason&#8212;it doesn&#8217;t finish. If you get an <strong>out of memory</strong> error try splitting up the import file into pieces.'); ?> </p>
+<p><?php _e('The importer is smart enough not to import duplicates, so you can run this multiple times without worry if&#8212;for whatever reason&#8212;it doesn&#8217;t finish. If you get an <strong>out of memory</strong> error try splitting up the import file into pieces.', 'movabletype-importer'); ?> </p>
 </div>
 <?php
 		$this->footer();
@@ -74,7 +74,7 @@ class MT_Import extends WP_Importer {
 	function users_form($n) {
 		$users = get_users_of_blog();
 ?><select name="userselect[<?php echo $n; ?>]">
-	<option value="#NONE#"><?php _e('&mdash; Select &mdash;') ?></option>
+	<option value="#NONE#"><?php _e('&mdash; Select &mdash;', 'movabletype-importer') ?></option>
 	<?php
 		foreach ( $users as $user )
 			echo '<option value="' . $user->user_login . '">' . $user->user_login . '</option>';
@@ -204,10 +204,10 @@ class MT_Import extends WP_Importer {
 ?>
 <div class="wrap">
 <?php screen_icon(); ?>
-<h2><?php _e('Assign Authors'); ?></h2>
-<p><?php _e('To make it easier for you to edit and save the imported posts and drafts, you may want to change the name of the author of the posts. For example, you may want to import all the entries as admin&#8217;s entries.'); ?></p>
-<p><?php _e('Below, you can see the names of the authors of the MovableType posts in <em>italics</em>. For each of these names, you can either pick an author in your WordPress installation from the menu, or enter a name for the author in the textbox.'); ?></p>
-<p><?php _e('If a new user is created by WordPress, a password will be randomly generated. Manually change the user&#8217;s details if necessary.'); ?></p>
+<h2><?php _e('Assign Authors', 'movabletype-importer'); ?></h2>
+<p><?php _e('To make it easier for you to edit and save the imported posts and drafts, you may want to change the name of the author of the posts. For example, you may want to import all the entries as admin&#8217;s entries.', 'movabletype-importer'); ?></p>
+<p><?php _e('Below, you can see the names of the authors of the MovableType posts in <em>italics</em>. For each of these names, you can either pick an author in your WordPress installation from the menu, or enter a name for the author in the textbox.', 'movabletype-importer'); ?></p>
+<p><?php _e('If a new user is created by WordPress, a password will be randomly generated. Manually change the user&#8217;s details if necessary.', 'movabletype-importer'); ?></p>
 	<?php
 
 
@@ -218,12 +218,12 @@ class MT_Import extends WP_Importer {
 		$j = -1;
 		foreach ($authors as $author) {
 			++ $j;
-			echo '<li><label>'.__('Current author:').' <strong>'.$author.'</strong><br />'.sprintf(__('Create user %1$s or map to existing'), ' <input type="text" value="'. esc_attr($author) .'" name="'.'user[]'.'" maxlength="30"> <br />');
+			echo '<li><label>'.__('Current author:', 'movabletype-importer').' <strong>'.$author.'</strong><br />'.sprintf(__('Create user %1$s or map to existing', 'movabletype-importer'), ' <input type="text" value="'. esc_attr($author) .'" name="'.'user[]'.'" maxlength="30"> <br />');
 			$this->users_form($j);
 			echo '</label></li>';
 		}
 
-		echo '<p class="submit"><input type="submit" class="button" value="'.esc_attr__('Submit').'"></p>'.'<br />';
+		echo '<p class="submit"><input type="submit" class="button" value="'.esc_attr__('Submit', 'movabletype-importer').'"></p>'.'<br />';
 		echo '</form>';
 		echo '</ol></div>';
 
@@ -233,13 +233,13 @@ class MT_Import extends WP_Importer {
 		if ( $_POST['upload_type'] === 'ftp' ) {
 			$file['file'] = WP_CONTENT_DIR . '/mt-export.txt';
 			if ( !file_exists($file['file']) )
-				$file['error'] = __('<code>mt-export.txt</code> does not exist');
+				$file['error'] = __('<code>mt-export.txt</code> does not exist', 'movabletype-importer');
 		} else {
 			$file = wp_import_handle_upload();
 		}
 		if ( isset($file['error']) ) {
 			$this->header();
-			echo '<p>'.__('Sorry, there has been an error').'.</p>';
+			echo '<p>'.__('Sorry, there has been an error', 'movabletype-importer').'.</p>';
 			echo '<p><strong>' . $file['error'] . '</strong></p>';
 			$this->footer();
 			return;
@@ -257,10 +257,10 @@ class MT_Import extends WP_Importer {
 
 		if ( $post_id = post_exists($post->post_title, '', $post->post_date) ) {
 			echo '<li>';
-			printf(__('Post <em>%s</em> already exists.'), stripslashes($post->post_title));
+			printf(__('Post <em>%s</em> already exists.', 'movabletype-importer'), stripslashes($post->post_title));
 		} else {
 			echo '<li>';
-			printf(__('Importing post <em>%s</em>...'), stripslashes($post->post_title));
+			printf(__('Importing post <em>%s</em>...', 'movabletype-importer'), stripslashes($post->post_title));
 
 			if ( '' != trim( $post->extended ) )
 					$post->post_content .= "\n<!--more-->\n$post->extended";
@@ -278,7 +278,7 @@ class MT_Import extends WP_Importer {
 			 // Add tags or keywords
 			if ( 1 < strlen($post->post_keywords) ) {
 			 	// Keywords exist.
-				printf('<br />'.__('Adding tags <em>%s</em>...'), stripslashes($post->post_keywords));
+				printf('<br />'.__('Adding tags <em>%s</em>...', 'movabletype-importer'), stripslashes($post->post_keywords));
 				wp_add_post_tags($post_id, $post->post_keywords);
 			}
 		}
@@ -297,7 +297,7 @@ class MT_Import extends WP_Importer {
 		}
 
 		if ( $num_comments )
-			printf(' '._n('(%s comment)', '(%s comments)', $num_comments), $num_comments);
+			printf(' '._n('(%s comment)', '(%s comments)', $num_comments, 'movabletype-importer'), $num_comments);
 
 		$num_pings = 0;
 		foreach ( $pings as $ping ) {
@@ -314,7 +314,7 @@ class MT_Import extends WP_Importer {
 		}
 
 		if ( $num_pings )
-			printf(' '._n('(%s ping)', '(%s pings)', $num_pings), $num_pings);
+			printf(' '._n('(%s ping)', '(%s pings)', $num_pings, 'movabletype-importer'), $num_pings);
 
 		echo "</li>";
 		//ob_flush();flush();
@@ -474,7 +474,7 @@ class MT_Import extends WP_Importer {
 		wp_import_cleanup($this->id);
 		do_action('import_done', 'mt');
 
-		echo '<h3>'.sprintf(__('All done. <a href="%s">Have fun!</a>'), get_option('home')).'</h3></div>';
+		echo '<h3>'.sprintf(__('All done. <a href="%s">Have fun!</a>', 'movabletype-importer'), get_option('home')).'</h3></div>';
 	}
 
 	function import() {
@@ -520,6 +520,11 @@ class MT_Import extends WP_Importer {
 
 $mt_import = new MT_Import();
 
-register_importer('mt', __('Movable Type and TypePad'), __('Import posts and comments from a Movable Type or TypePad blog.'), array ($mt_import, 'dispatch'));
+register_importer('mt', __('Movable Type and TypePad', 'movabletype-importer'), __('Import posts and comments from a Movable Type or TypePad blog.', 'movabletype-importer'), array ($mt_import, 'dispatch'));
 
 } // class_exists( 'WP_Importer' )
+
+function movabletype_importer_init() {
+    load_plugin_textdomain( 'movabletype-importer', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+}
+add_action( 'init', 'movabletype_importer_init' );
