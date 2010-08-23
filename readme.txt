@@ -3,7 +3,7 @@ Contributors: wordpressdotorg
 Donate link: 
 Tags: importer, movable type, typepad
 Requires at least: 3.0
-Tested up to: 3.0
+Tested up to: 3.0.1
 Stable tag: 0.4
 
 Import posts and comments from a Movable Type or TypePad blog.
