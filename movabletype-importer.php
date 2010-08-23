@@ -5,8 +5,8 @@ Plugin URI: http://wordpress.org/extend/plugins/movabletype-importer/
 Description: Import posts and comments from a Movable Type or TypePad blog.
 Author: wordpressdotorg
 Author URI: http://wordpress.org/
-Version: 0.3
-Stable tag: 0.3
+Version: 0.4
+Stable tag: 0.4
 License: GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
 
@@ -206,7 +206,7 @@ class MT_Import extends WP_Importer {
 <?php screen_icon(); ?>
 <h2><?php _e('Assign Authors', 'movabletype-importer'); ?></h2>
 <p><?php _e('To make it easier for you to edit and save the imported posts and drafts, you may want to change the name of the author of the posts. For example, you may want to import all the entries as admin&#8217;s entries.', 'movabletype-importer'); ?></p>
-<p><?php _e('Below, you can see the names of the authors of the MovableType posts in <em>italics</em>. For each of these names, you can either pick an author in your WordPress installation from the menu, or enter a name for the author in the textbox.', 'movabletype-importer'); ?></p>
+<p><?php _e('Below, you can see the names of the authors of the Movable Type posts in <em>italics</em>. For each of these names, you can either pick an author in your WordPress installation from the menu, or enter a name for the author in the textbox.', 'movabletype-importer'); ?></p>
 <p><?php _e('If a new user is created by WordPress, a password will be randomly generated. Manually change the user&#8217;s details if necessary.', 'movabletype-importer'); ?></p>
 	<?php
 
@@ -372,45 +372,49 @@ class MT_Import extends WP_Importer {
 				$context = 'comment';
 			} else if ( 'PING:' == $line ) {
 				$context = 'ping';
-			} else if ( 0 === strpos($line, "AUTHOR:") ) {
-				$author = trim( substr($line, strlen("AUTHOR:")) );
+			} else if ( 0 === strpos($line, 'AUTHOR:') ) {
+				$author = trim( substr($line, strlen('AUTHOR:')) );
 				if ( '' == $context )
 					$post->post_author = $author;
 				else if ( 'comment' == $context )
 					 $comment->comment_author = $author;
-			} else if ( 0 === strpos($line, "TITLE:") ) {
-				$title = trim( substr($line, strlen("TITLE:")) );
+			} else if ( 0 === strpos($line, 'TITLE:') ) {
+				$title = trim( substr($line, strlen('TITLE:')) );
 				if ( '' == $context )
 					$post->post_title = $title;
 				else if ( 'ping' == $context )
 					$ping->title = $title;
-			} else if ( 0 === strpos($line, "STATUS:") ) {
-				$status = trim( strtolower( substr($line, strlen("STATUS:")) ) );
+			} else if ( 0 === strpos($line, 'BASENAME:') ) {
+				$slug = trim( substr($line, strlen('BASENAME:')) );
+				if ( !empty( $slug ) )
+					$post->post_name = $slug;
+			} else if ( 0 === strpos($line, 'STATUS:') ) {
+				$status = trim( strtolower( substr($line, strlen('STATUS:')) ) );
 				if ( empty($status) )
 					$status = 'publish';
 				$post->post_status = $status;
-			} else if ( 0 === strpos($line, "ALLOW COMMENTS:") ) {
-				$allow = trim( substr($line, strlen("ALLOW COMMENTS:")) );
+			} else if ( 0 === strpos($line, 'ALLOW COMMENTS:') ) {
+				$allow = trim( substr($line, strlen('ALLOW COMMENTS:')) );
 				if ( $allow == 1 )
 					$post->comment_status = 'open';
 				else
 					$post->comment_status = 'closed';
-			} else if ( 0 === strpos($line, "ALLOW PINGS:") ) {
-				$allow = trim( substr($line, strlen("ALLOW PINGS:")) );
+			} else if ( 0 === strpos($line, 'ALLOW PINGS:') ) {
+				$allow = trim( substr($line, strlen('ALLOW PINGS:')) );
 				if ( $allow == 1 )
 					$post->ping_status = 'open';
 				else
 					$post->ping_status = 'closed';
-			} else if ( 0 === strpos($line, "CATEGORY:") ) {
-				$category = trim( substr($line, strlen("CATEGORY:")) );
+			} else if ( 0 === strpos($line, 'CATEGORY:') ) {
+				$category = trim( substr($line, strlen('CATEGORY:')) );
 				if ( '' != $category )
 					$post->categories[] = $category;
-			} else if ( 0 === strpos($line, "PRIMARY CATEGORY:") ) {
-				$category = trim( substr($line, strlen("PRIMARY CATEGORY:")) );
+			} else if ( 0 === strpos($line, 'PRIMARY CATEGORY:') ) {
+				$category = trim( substr($line, strlen('PRIMARY CATEGORY:')) );
 				if ( '' != $category )
 					$post->categories[] = $category;
-			} else if ( 0 === strpos($line, "DATE:") ) {
-				$date = trim( substr($line, strlen("DATE:")) );
+			} else if ( 0 === strpos($line, 'DATE:') ) {
+				$date = trim( substr($line, strlen('DATE:')) );
 				$date = strtotime($date);
 				$date = date('Y-m-d H:i:s', $date);
 				$date_gmt = get_gmt_from_date($date);
@@ -424,30 +428,27 @@ class MT_Import extends WP_Importer {
 				} else if ( 'ping' == $context ) {
 					$ping->comment_date = $date;
 				}
-			} else if ( 0 === strpos($line, "EMAIL:") ) {
-				$email = trim( substr($line, strlen("EMAIL:")) );
+			} else if ( 0 === strpos($line, 'EMAIL:') ) {
+				$email = trim( substr($line, strlen('EMAIL:')) );
 				if ( 'comment' == $context )
 					$comment->comment_author_email = $email;
 				else
 					$ping->comment_author_email = '';
-			} else if ( 0 === strpos($line, "IP:") ) {
-				$ip = trim( substr($line, strlen("IP:")) );
+			} else if ( 0 === strpos($line, 'IP:') ) {
+				$ip = trim( substr($line, strlen('IP:')) );
 				if ( 'comment' == $context )
 					$comment->comment_author_IP = $ip;
 				else
 					$ping->comment_author_IP = $ip;
-			} else if ( 0 === strpos($line, "URL:") ) {
-				$url = trim( substr($line, strlen("URL:")) );
+			} else if ( 0 === strpos($line, 'URL:') ) {
+				$url = trim( substr($line, strlen('URL:')) );
 				if ( 'comment' == $context )
 					$comment->comment_author_url = $url;
 				else
 					$ping->comment_author_url = $url;
-			} else if ( 0 === strpos($line, "BLOG NAME:") ) {
-				$blog = trim( substr($line, strlen("BLOG NAME:")) );
+			} else if ( 0 === strpos($line, 'BLOG NAME:') ) {
+				$blog = trim( substr($line, strlen('BLOG NAME:')) );
 				$ping->comment_author = $blog;
-			} else if ( 0 === strpos($line, "BASENAME:") ) {
-				$post_name = trim( substr($line, strlen("BASENAME:")) );
-				$post->post_name = $post_name;
 			} else {
 				// Processing multi-line field, check context.
 

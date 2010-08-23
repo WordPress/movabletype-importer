@@ -4,7 +4,7 @@ Donate link:
 Tags: importer, movable type, typepad
 Requires at least: 3.0
 Tested up to: 3.0
-Stable tag: 0.2
+Stable tag: 0.4
 
 Import posts and comments from a Movable Type or TypePad blog.
 
@@ -30,7 +30,14 @@ Import posts and comments from a Movable Type or TypePad blog.
 = 0.3 =
 * Use BASENAME, if present, as the slug for the post.
 
+= 0.4 =
+* String updates
+
 == Upgrade Notice ==
 
 = 0.3 =
 Use BASENAME for post slugs.
+
+= 0.4 =
+Import post slugs to make URL transition easier.
+

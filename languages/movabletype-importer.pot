@@ -64,7 +64,7 @@ msgstr ""
 
 #: movabletype-importer.php:209
 msgid ""
-"Below, you can see the names of the authors of the MovableType posts in "
+"Below, you can see the names of the authors of the Movable Type posts in "
 "<em>italics</em>. For each of these names, you can either pick an author in "
 "your WordPress installation from the menu, or enter a name for the author in "
 "the textbox."
