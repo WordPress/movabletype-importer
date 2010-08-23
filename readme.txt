@@ -26,3 +26,11 @@ Import posts and comments from a Movable Type or TypePad blog.
 
 = 0.1 =
 * Initial release
+
+= 0.3 =
+* Use BASENAME, if present, as the slug for the post.
+
+== Upgrade Notice ==
+
+= 0.3 =
+Use BASENAME for post slugs.
