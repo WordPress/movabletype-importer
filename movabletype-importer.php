@@ -5,13 +5,22 @@ Plugin URI: http://wordpress.org/extend/plugins/movabletype-importer/
 Description: Import posts and comments from a Movable Type or TypePad blog.
 Author: wordpressdotorg
 Author URI: http://wordpress.org/
-Version: 0.4
-Stable tag: 0.4
+Version: 0.5-beta
 License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
 
 if ( !defined('WP_LOAD_IMPORTERS') )
 	return;
+
+// define this to false to disallow duplicated comments. Warning: very slow on large imports
+if ( !defined('WP_MT_IMPORT_ALLOW_DUPE_COMMENTS') ) {
+	define( 'WP_MT_IMPORT_ALLOW_DUPE_COMMENTS', true );
+}
+
+// define this to true to force autocommit during import. Warning: extremely slow on large imports.
+if ( !defined('WP_MT_IMPORT_FORCE_AUTOCOMMIT') ) {
+	define( 'WP_MT_IMPORT_FORCE_AUTOCOMMIT', false );
+}
 
 // Load Importer API
 require_once ABSPATH . 'wp-admin/includes/import.php';
@@ -288,7 +297,7 @@ class MT_Import extends WP_Importer {
 			$comment = get_object_vars($comment);
 			$comment = add_magic_quotes($comment);
 
-			if ( !comment_exists($comment['comment_author'], $comment['comment_date'])) {
+			if ( WP_MT_IMPORT_ALLOW_DUPE_COMMENTS || !comment_exists($comment['comment_author'], $comment['comment_date'])) {
 				$comment['comment_post_ID'] = $post_id;
 				$comment = wp_filter_comment($comment);
 				wp_insert_comment($comment);
@@ -304,7 +313,7 @@ class MT_Import extends WP_Importer {
 			$ping = get_object_vars($ping);
 			$ping = add_magic_quotes($ping);
 
-			if ( !comment_exists($ping['comment_author'], $ping['comment_date'])) {
+			if ( WP_MT_IMPORT_ALLOW_DUPE_COMMENTS || !comment_exists($ping['comment_author'], $ping['comment_date'])) {
 				$ping['comment_content'] = "<strong>{$ping['title']}</strong>\n\n{$ping['comment_content']}";
 				$ping['comment_post_ID'] = $post_id;
 				$ping = wp_filter_comment($ping);
@@ -335,8 +344,26 @@ class MT_Import extends WP_Importer {
 		$pings = array();
 
 		echo "<div class='wrap'><ol>";
+		
+		// disable some slowdown points, turn them back on later
+		wp_suspend_cache_invalidation( true );
+		wp_defer_term_counting( true );
+		wp_defer_comment_counting( true );
 
+		// turn off autocommit, for speed
+		if ( !WP_MT_IMPORT_FORCE_AUTOCOMMIT ) {
+			$wpdb->query('SET autocommit = 0');
+		}
+		
+		$count = 0;
 		while ( $line = $this->fgets($handle) ) {
+			
+			// commit once every 500 posts
+			$count++;
+			if ( !WP_MT_IMPORT_FORCE_AUTOCOMMIT && $count % 500 === 0 ) {
+				$wpdb->query('COMMIT');
+			}
+			
 			$line = trim($line);
 
 			if ( '-----' == $line ) {
@@ -474,6 +501,18 @@ class MT_Import extends WP_Importer {
 		$this->fclose($handle);
 
 		echo '</ol>';
+		
+		// commit the changes, turn autocommit back on
+		if ( !WP_MT_IMPORT_FORCE_AUTOCOMMIT ) {
+			$wpdb->query('COMMIT');
+			$wpdb->query('SET autocommit = 1');
+		}
+		
+		// turn basic caching and counting back on, flush the cache. This will also cause a full count to be performed for terms and comments
+		wp_suspend_cache_invalidation( false );
+		wp_cache_flush();
+		wp_defer_term_counting( false );
+		wp_defer_comment_counting( false );
 
 		wp_import_cleanup($this->id);
 		do_action('import_done', 'mt');

@@ -26,6 +26,11 @@ Import posts and comments from a Movable Type or TypePad blog.
 
 == Changelog ==
 
+= 0.5 =
+* Remove comment_exists check for importing comments. In testing, I found no duplicated comments via this method, and it's extremely slow on large imports. If this check is needed, then define('WP_MT_IMPORT_ALLOW_DUPE_COMMENTS', false);
+* Disable cache invalidation and both term and comment counting during import, for speed. Re-enable them after import.
+* Disable autocommit during import, commit once every 500 posts and after complete import. Huge speed boost. To force autocommit to be left alone, define('WP_MT_IMPORT_FORCE_AUTOCOMMIT',true);
+
 = 0.4 =
 * String updates
 
