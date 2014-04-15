@@ -4,7 +4,7 @@ Donate link:
 Tags: importer, movable type, typepad
 Requires at least: 3.0
 Tested up to: 3.4
-Stable tag: trunk
+Stable tag: 0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,17 @@ Import posts and comments from a Movable Type or TypePad blog.
 == Screenshots ==
 
 == Changelog ==
+
+= 0.4 = 
+* Text updates. Better BASENAME processing. Props niallkennedy. see #WP14677
+
+
+= 0.3 =
+* I18N
+* Use BAENAME for post slug. Props Akinori MUSHA. see #WP11422
+
+= 0.2 =
+* Add check for WP_LOAD_IMPORTERS
 
 = 0.1 =
 * Initial release
