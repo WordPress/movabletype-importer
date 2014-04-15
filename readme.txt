@@ -26,13 +26,11 @@ Import posts and comments from a Movable Type or TypePad blog.
 
 == Changelog ==
 
-= 0.4 = 
-* Text updates. Better BASENAME processing. Props niallkennedy. see #WP14677
-
+= 0.4 =
+* String updates
 
 = 0.3 =
-* I18N
-* Use BAENAME for post slug. Props Akinori MUSHA. see #WP11422
+* Use BASENAME, if present, as the slug for the post.
 
 = 0.2 =
 * Add check for WP_LOAD_IMPORTERS
@@ -40,17 +38,10 @@ Import posts and comments from a Movable Type or TypePad blog.
 = 0.1 =
 * Initial release
 
-= 0.3 =
-* Use BASENAME, if present, as the slug for the post.
-
-= 0.4 =
-* String updates
-
 == Upgrade Notice ==
-
-= 0.3 =
-Use BASENAME for post slugs.
 
 = 0.4 =
 Import post slugs to make URL transition easier.
 
+= 0.3 =
+Use BASENAME for post slugs.
