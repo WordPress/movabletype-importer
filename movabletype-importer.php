@@ -239,7 +239,7 @@ class MT_Import extends WP_Importer {
 	}
 
 	function select_authors() {
-		if ( $_POST['upload_type'] === 'ftp' ) {
+		if ( isset( $_POST['upload_type'] ) && $_POST['upload_type'] === 'ftp' ) {
 			$file['file'] = WP_CONTENT_DIR . '/mt-export.txt';
 			if ( !file_exists($file['file']) )
 				$file['error'] = __('<code>mt-export.txt</code> does not exist', 'movabletype-importer');
