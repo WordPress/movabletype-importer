@@ -555,10 +555,6 @@ class MT_Import extends WP_Importer {
 				break;
 		}
 	}
-
-	function MT_Import() {
-		// Nothing.
-	}
 }
 
 $mt_import = new MT_Import();
