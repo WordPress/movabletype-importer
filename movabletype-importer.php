@@ -49,7 +49,11 @@ class MT_Import extends WP_Importer {
 
 	function header() {
 		echo '<div class="wrap">';
-		screen_icon();
+
+		if ( version_compare(get_bloginfo('version'), '3.8.0', '<') ) {
+			screen_icon();
+		}
+
 		echo '<h2>'.__('Import Movable Type or TypePad', 'movabletype-importer').'</h2>';
 	}
 
@@ -81,7 +85,7 @@ class MT_Import extends WP_Importer {
 	}
 
 	function users_form($n) {
-		$users = get_users_of_blog();
+		$users = version_compare(get_bloginfo('version'), '3.1.0', '<') ? get_users_of_blog() : get_users();
 ?><select name="userselect[<?php echo $n; ?>]">
 	<option value="#NONE#"><?php _e('&mdash; Select &mdash;', 'movabletype-importer') ?></option>
 	<?php
@@ -212,7 +216,11 @@ class MT_Import extends WP_Importer {
 	function mt_authors_form() {
 ?>
 <div class="wrap">
-<?php screen_icon(); ?>
+<?php
+if ( version_compare(get_bloginfo('version'), '3.8.0', '<') ) {
+	screen_icon();
+}
+?>
 <h2><?php _e('Assign Authors', 'movabletype-importer'); ?></h2>
 <p><?php _e('To make it easier for you to edit and save the imported posts and drafts, you may want to change the name of the author of the posts. For example, you may want to import all the entries as admin&#8217;s entries.', 'movabletype-importer'); ?></p>
 <p><?php _e('Below, you can see the names of the authors of the Movable Type posts in <em>italics</em>. For each of these names, you can either pick an author in your WordPress installation from the menu, or enter a name for the author in the textbox.', 'movabletype-importer'); ?></p>
@@ -344,7 +352,7 @@ class MT_Import extends WP_Importer {
 		$pings = array();
 
 		echo "<div class='wrap'><ol>";
-		
+
 		// disable some slowdown points, turn them back on later
 		wp_suspend_cache_invalidation( true );
 		wp_defer_term_counting( true );
@@ -354,16 +362,16 @@ class MT_Import extends WP_Importer {
 		if ( !WP_MT_IMPORT_FORCE_AUTOCOMMIT ) {
 			$wpdb->query('SET autocommit = 0');
 		}
-		
+
 		$count = 0;
 		while ( $line = $this->fgets($handle) ) {
-			
+
 			// commit once every 500 posts
 			$count++;
 			if ( !WP_MT_IMPORT_FORCE_AUTOCOMMIT && $count % 500 === 0 ) {
 				$wpdb->query('COMMIT');
 			}
-			
+
 			$line = trim($line);
 
 			if ( '-----' == $line ) {
@@ -501,13 +509,13 @@ class MT_Import extends WP_Importer {
 		$this->fclose($handle);
 
 		echo '</ol>';
-		
+
 		// commit the changes, turn autocommit back on
 		if ( !WP_MT_IMPORT_FORCE_AUTOCOMMIT ) {
 			$wpdb->query('COMMIT');
 			$wpdb->query('SET autocommit = 1');
 		}
-		
+
 		// turn basic caching and counting back on, flush the cache. This will also cause a full count to be performed for terms and comments
 		wp_suspend_cache_invalidation( false );
 		wp_cache_flush();
