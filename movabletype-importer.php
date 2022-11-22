@@ -337,6 +337,32 @@ if ( version_compare(get_bloginfo('version'), '3.8.0', '<') ) {
 		//ob_flush();flush();
 	}
 
+	private function create_post() {
+		$post = new StdClass();
+
+		$post->post_content = '';
+		$post->extended = '';
+		$post->post_excerpt = '';
+		$post->post_keywords = '';
+		$post->categories = array();
+
+		return $post;
+	}
+
+	private function create_comment() {
+		$comment = new StdClass();
+
+		$comment->comment_content = '';
+		$comment->comment_author = '';
+		$comment->comment_author_url = '';
+		$comment->comment_author_email = '';
+		$comment->comment_author_IP = '';
+		$comment->comment_date = null;
+		$comment->comment_post_ID = null;
+
+		return $comment;
+	}
+
 	function process_posts() {
 		global $wpdb;
 
@@ -345,10 +371,10 @@ if ( version_compare(get_bloginfo('version'), '3.8.0', '<') ) {
 			return false;
 
 		$context = '';
-		$post = new StdClass();
-		$comment = new StdClass();
+		$post = $this->create_post();
+		$comment = $this->create_comment();
 		$comments = array();
-		$ping = new StdClass();
+		$ping = $this->create_comment();
 		$pings = array();
 
 		echo "<div class='wrap'><ol>";
@@ -378,22 +404,24 @@ if ( version_compare(get_bloginfo('version'), '3.8.0', '<') ) {
 				// Finishing a multi-line field
 				if ( 'comment' == $context ) {
 					$comments[] = $comment;
-					$comment = new StdClass();
+					$comment = $this->create_comment();
 				} else if ( 'ping' == $context ) {
 					$pings[] = $ping;
-					$ping = new StdClass();
+					$ping = $this->create_comment();
 				}
 				$context = '';
 			} else if ( '--------' == $line ) {
 				// Finishing a post.
 				$context = '';
 				$result = $this->save_post($post, $comments, $pings);
-				if ( is_wp_error( $result ) )
+				if ( is_wp_error( $result ) ) {
 					return $result;
-				$post = new StdClass;
-				$comment = new StdClass();
-				$ping = new StdClass();
+				}
+
+				$post = $this->create_post();
+				$comment = $this->create_comment();
 				$comments = array();
+				$ping = $this->create_comment();
 				$pings = array();
 			} else if ( 'BODY:' == $line ) {
 				$context = 'body';
