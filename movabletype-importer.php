@@ -413,7 +413,7 @@ if ( version_compare( get_bloginfo( 'version' ), '3.8.0', '<' ) ) {
 			} else if ( '--------' == $line ) {
 				// Finishing a post.
 				$context = '';
-				$result = $this->save_post($post, $comments, $pings);
+				$result = $this->save_post( $post, $comments, $pings );
 				if ( is_wp_error( $result ) ) {
 					return $result;
 				}
