@@ -50,7 +50,7 @@ class MT_Import extends WP_Importer {
 	function header() {
 		echo '<div class="wrap">';
 
-		if ( version_compare(get_bloginfo('version'), '3.8.0', '<') ) {
+		if ( version_compare( get_bloginfo( 'version' ), '3.8.0', '<' ) ) {
 			screen_icon();
 		}
 
@@ -85,7 +85,7 @@ class MT_Import extends WP_Importer {
 	}
 
 	function users_form($n) {
-		$users = version_compare(get_bloginfo('version'), '3.1.0', '<') ? get_users_of_blog() : get_users();
+		$users = version_compare( get_bloginfo( 'version' ), '3.1.0', '<' ) ? get_users_of_blog() : get_users();
 ?><select name="userselect[<?php echo $n; ?>]">
 	<option value="#NONE#"><?php _e('&mdash; Select &mdash;', 'movabletype-importer') ?></option>
 	<?php
@@ -217,7 +217,7 @@ class MT_Import extends WP_Importer {
 ?>
 <div class="wrap">
 <?php
-if ( version_compare(get_bloginfo('version'), '3.8.0', '<') ) {
+if ( version_compare( get_bloginfo( 'version' ), '3.8.0', '<' ) ) {
 	screen_icon();
 }
 ?>
