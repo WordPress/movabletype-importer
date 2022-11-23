@@ -1,10 +1,10 @@
 === Plugin Name ===
 Contributors: wordpressdotorg
-Donate link: 
+Donate link:
 Tags: importer, movable type, typepad
 Requires at least: 3.0
-Tested up to: 4.1
-Stable tag: 0.4
+Tested up to: 6.1
+Stable tag: 0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,9 @@ Import posts and comments from a Movable Type or TypePad blog.
 == Screenshots ==
 
 == Changelog ==
+
+= 0.6 =
+* Add support for WordPress 6.1
 
 = 0.5 =
 * Remove comment_exists check for importing comments. In testing, I found no duplicated comments via this method, and it's extremely slow on large imports. If this check is needed, then define('WP_MT_IMPORT_ALLOW_DUPE_COMMENTS', false);
