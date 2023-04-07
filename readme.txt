@@ -4,7 +4,7 @@ Donate link:
 Tags: importer, movable type, typepad
 Requires at least: 3.0
 Tested up to: 6.2
-Stable tag: 0.7
+Stable tag: 0.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,8 +26,8 @@ Import posts and comments from a Movable Type or TypePad blog.
 
 == Changelog ==
 
-= 0.7 =
-* Add support for WordPress 6.2
+= 0.6.1 =
+* Test the plugin up to WordPress 6.2
 
 = 0.6 =
 * Add support for WordPress 6.1
