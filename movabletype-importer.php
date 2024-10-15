@@ -262,7 +262,7 @@ if ( version_compare( get_bloginfo( 'version' ), '3.8.0', '<' ) ) {
 			return;
 		}
 		$this->file = $file['file'];
-		$this->id = (int) $file['id'];
+		$this->id = array_key_exists( 'id', $file ) ? (int) $file['id'] : 0;
 
 		$this->mt_authors_form();
 	}
