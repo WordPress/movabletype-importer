@@ -5,7 +5,7 @@ Plugin URI: https://wordpress.org/extend/plugins/movabletype-importer/
 Description: Import posts and comments from a Movable Type or TypePad blog.
 Author: wordpressdotorg
 Author URI: https://wordpress.org/
-Version: 0.6.2
+Version: 0.6.3
 License: GPL version 2 or later - https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
 
@@ -262,7 +262,7 @@ if ( version_compare( get_bloginfo( 'version' ), '3.8.0', '<' ) ) {
 			return;
 		}
 		$this->file = $file['file'];
-		$this->id = (int) $file['id'];
+		$this->id = array_key_exists( 'id', $file ) ? (int) $file['id'] : 0;
 
 		$this->mt_authors_form();
 	}
