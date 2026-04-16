@@ -3,8 +3,8 @@ Contributors: wordpressdotorg
 Donate link:
 Tags: importer, movable type, typepad
 Requires at least: 3.0
-Tested up to: 6.7
-Stable tag: 0.6.3
+Tested up to: 6.9
+Stable tag: 0.6.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,10 @@ Import posts and comments from a Movable Type or TypePad blog.
 == Screenshots ==
 
 == Changelog ==
+
+= 0.6.4 =
+* Testing the plugin up to WordPress 6.9
+* Add missing HTML escape on output functions
 
 = 0.6.3 =
 * Testing the plugin up to WordPress 6.7
