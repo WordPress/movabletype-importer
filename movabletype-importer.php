@@ -235,7 +235,7 @@ if ( version_compare( get_bloginfo( 'version' ), '3.8.0', '<' ) ) {
 		$j = -1;
 		foreach ($authors as $author) {
 			++ $j;
-			echo '<li><label>'.__('Current author:', 'movabletype-importer').' <strong>'.$author.'</strong><br />'.sprintf(__('Create user %1$s or map to existing', 'movabletype-importer'), ' <input type="text" value="'. esc_attr($author) .'" name="'.'user[]'.'" maxlength="30"> <br />');
+			echo '<li><label>'.__('Current author:', 'movabletype-importer').' <strong>'. esc_html($author) .'</strong><br />'.sprintf(__('Create user %1$s or map to existing', 'movabletype-importer'), ' <input type="text" value="'. esc_attr($author) .'" name="'.'user[]'.'" maxlength="30"> <br />');
 			$this->users_form($j);
 			echo '</label></li>';
 		}
@@ -274,10 +274,10 @@ if ( version_compare( get_bloginfo( 'version' ), '3.8.0', '<' ) ) {
 
 		if ( $post_id = post_exists($post->post_title, '', $post->post_date) ) {
 			echo '<li>';
-			printf(__('Post <em>%s</em> already exists.', 'movabletype-importer'), stripslashes($post->post_title));
+			printf(__('Post <em>%s</em> already exists.', 'movabletype-importer'), esc_html( stripslashes($post->post_title) ));
 		} else {
 			echo '<li>';
-			printf(__('Importing post <em>%s</em>...', 'movabletype-importer'), stripslashes($post->post_title));
+			printf(__('Importing post <em>%s</em>...', 'movabletype-importer'), esc_html( stripslashes($post->post_title) ));
 
 			if ( '' != trim( $post->extended ) )
 					$post->post_content .= "\n<!--more-->\n$post->extended";
@@ -295,7 +295,7 @@ if ( version_compare( get_bloginfo( 'version' ), '3.8.0', '<' ) ) {
 			 // Add tags or keywords
 			if ( 1 < strlen($post->post_keywords) ) {
 			 	// Keywords exist.
-				printf('<br />'.__('Adding tags <em>%s</em>...', 'movabletype-importer'), stripslashes($post->post_keywords));
+				printf('<br />'.__('Adding tags <em>%s</em>...', 'movabletype-importer'), esc_html( stripslashes($post->post_keywords) ));
 				wp_add_post_tags($post_id, $post->post_keywords);
 			}
 		}
